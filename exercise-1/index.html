@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Exercise 1</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script>
+        function getData() {
+    fetch('https://5dc588200bbd050014fb8ae1.mockapi.io/assessment')
+        .then(response => response.json())
+        .then(userData => {
+            const usersRenderDiv = document.getElementById("users");
+    const template = Handlebars.compile(`
+    <h4>User List:</h4>
+    <ul> 
+    {{#each userData}} 
+    <li>
+       <span> Name : {{this.name}} </span> 
+       <img src={{this.avatar}} alt={{this.avatar}}> 
+       <button type=button onclick='hideShow({{this.id}})'>More <i class="arrow"></i></button>
+       <p id={{this.id}} style = 'display: none'> ID : {{this.id}} Created At :{{this.createdAt}}</p>
+    </li>
+    {{/each}} 
+    </ul>`);
+    usersRenderDiv.innerHTML = template({ userData: userData });
+        });
+}
+
+function hideShow(id) {
+    const currentUser = document.getElementById(id);
+    if (currentUser.style.display === "none") {
+        currentUser.style.display = "block";
+    } else {
+        currentUser.style.display = "none";
+    }
+}
+    </script>
+    <style>
+        li{
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #808080;
+        }
+        .arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+    </style>
+</head>
+
+<body onload="getData()">
+    <div id="users"></div>
+</body>
+
+</html>
